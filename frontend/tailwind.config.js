@@ -1,9 +1,13 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [],
+  content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        clear: "#F0F8FF",
+        dark: "#1D232A",
+      },
+    },
   },
-  plugins: [],
-}
-
+  plugins: [require("daisyui")],
+};
