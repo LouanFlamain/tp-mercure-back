@@ -9,19 +9,28 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use App\Entity\User;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 
 class ApiLoginController extends AbstractController
   {
+
+    private $JWTManager;
+
+    public function __construct(JWTTokenManagerInterface $JWTManager)
+    {
+        $this->JWTManager = $JWTManager;
+    }
+
     #[Route('/api/login', name: 'api_login')]
-     public function index(#[CurrentUser] ?User $user): Response
+     public function index(#[CurrentUser] ?User $user)
       {
-         if (null === $user) {
+         /*if (null === $user) {
              return $this->json([
                  'message' => 'missing credentials',
              ], Response::HTTP_UNAUTHORIZED);
          }
 
-         //$token = ...; // somehow create an API token for $user
+         $token = $this->JWTManager->create($user);
 
          //implémenter api token
 
@@ -32,8 +41,9 @@ class ApiLoginController extends AbstractController
              'role' => $user->getRoles(),
              'password' => $user->getPassword(),
              'email' => $user->getEmail(),
+             'token' => $token
 
              //'token' => $token,
-          ]);
+          ]);*/
       }
   }
