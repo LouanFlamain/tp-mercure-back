@@ -28,12 +28,12 @@ class AuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterf
         $jwtToken = $this->JWTManager->create($user);
 
         $response = new JsonResponse([
+            'success' => true,
             'token' => $jwtToken,
-            'success' => true
         ]);
 
 
-        $cookie = new Cookie(
+        /*$cookie = new Cookie(
             'BEARER',
             $jwtToken,
             //3600
@@ -52,7 +52,7 @@ class AuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterf
             //Cookie::SAMESITE_NONE  // SameSite 
         );
     $response->headers->setCookie($cookie);
-    //$response->headers->set('Set-Cookie', "BEARER=".$jwtToken);
+    //$response->headers->set('Set-Cookie', "BEARER=".$jwtToken);*/
 
         return $response;
     }
