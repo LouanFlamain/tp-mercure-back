@@ -35,7 +35,7 @@ const Register = () => {
         "Content-Type": "application/json",
       },
       credentials: "include",
-      body: JSON.stringify(test),
+      body: JSON.stringify(user),
     })
       .then((response) => response.json())
       .then((data) => {

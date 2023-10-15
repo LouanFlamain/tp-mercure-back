@@ -11,25 +11,46 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Cookie;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\User;
 
 class AuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterface
 {
     private $JWTManager;
+    private $entityManager;
 
-    public function __construct(JWTTokenManagerInterface $JWTManager)
+    public function __construct(JWTTokenManagerInterface $JWTManager, EntityManagerInterface $entityManager)
     {
         $this->JWTManager = $JWTManager;
+        $this->entityManager = $entityManager;
     }
 
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token): JsonResponse
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token) : JsonResponse
     {
         /** @var UserInterface $user */
-        $user = $token->getUser();
-        $jwtToken = $this->JWTManager->create($user);
+        $userToken = $token->getUser();
+        $jwtToken = $this->JWTManager->create($userToken);
+
+        $email = $token->getUserIdentifier();
+
+        $repository = $this->entityManager->getRepository(User::class);
+        $qb = $repository->createQueryBuilder('p');
+        $qb->select('p')
+        ->where('p.email = :email')
+        ->setParameter('email', $email);
+
+        $user = $qb->getQuery()->getOneOrNullResult();
+        $username = $user->getUsername();
+        $createAt = $user->getCreatedAt();
+        $role = $user->getRoles();
 
         $response = new JsonResponse([
             'success' => true,
             'token' => $jwtToken,
+            'email' => $email,
+            'username' => $username,
+            'creation_date' => $createAt,
+            'role' => $role
         ]);
 
 

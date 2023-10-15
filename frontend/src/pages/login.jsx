@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addUser } from "../components/redux/userSlice";
 
 const Login = () => {
   const userValue = {
@@ -8,6 +10,8 @@ const Login = () => {
   };
 
   const [user, setUser] = useState(userValue);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleChangeUser = (e, type) => {
     let value = e.target.value;
@@ -30,6 +34,11 @@ const Login = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log("response", data);
+        if (data.success) {
+          localStorage.setItem("token", data.token);
+          dispatch(addUser(data));
+          navigate("/");
+        }
       })
       .catch((error) => {
         console.error("There was an error!", error);
@@ -73,7 +82,7 @@ const Login = () => {
         </div>
         <div className="flex flex-col items-center mt-3">
           <p>Vous n'avez pas de compte ?</p>
-          <Link className="text-dark" to="/register">
+          <Link className="text-dark" to="/test">
             Créez en un ici !
           </Link>
         </div>
