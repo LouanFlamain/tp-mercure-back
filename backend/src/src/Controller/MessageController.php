@@ -3,6 +3,7 @@
 namespace App\Controller;
 use App\Entity\Message;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -20,13 +21,24 @@ class MessageController extends AbstractController
     UserRepository $UserRepository): Response
     {
         $data = json_decode($request->getContent(), true);
+        $channelId = $data['channelId'] ?? null;
+        $userId = $data['userId'] ?? null;
+        $messageContent = $data['message']?? null;
+
+
+        if(!$userId || !$channelId || !$messageContent){
+            return new JsonResponse(array(
+                'success' => false,
+                'message' => 'not correct fields'
+            ), Response::HTTP_BAD_REQUEST);
+        }
 
         $message = new Message();
     
         // Fetch the Channel entity based on the channelId
-        $channel = $channelRepository->find($data['channelId']);
+        $channel = $channelRepository->find($channelId);
 
-        $user = $UserRepository->find($data['userId']);
+        $user = $UserRepository->find($userId);
     
         if (!$channel) {
             return new JsonResponse(['error' => 'Canal non trouvé'], 404);
@@ -35,13 +47,15 @@ class MessageController extends AbstractController
     
         $message->setChannel($channel); 
         $message->setUserId($user);
-        $message->setText($data['message']);
+        $message->setText($messageContent);
     
         $entityManager->persist($message);
         $entityManager->flush();
 
         return $this->json([
-            'message' => 'créé'
+            'message' => 'créé',
+            'user'=> $user->getUsername(),
+            'envoyé'=> $messageContent
         ]);
     }
 

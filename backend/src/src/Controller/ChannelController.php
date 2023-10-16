@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Channel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -21,12 +22,20 @@ class ChannelController extends AbstractController
     public function index(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
     {
         $data = json_decode($request->getContent(), true);
+        $userIds = $data['userIds']?? null;
+        $name = $data['name']?? null;
 
-        // Vérifiez si le champ 'userIds' existe dans les données JSON
-        if (isset($data['userIds'])) {
+        if(!$name || !$userIds){
+            return new JsonResponse(array(
+                'success' => false,
+                'message' => 'not correct fields'
+            ), Response::HTTP_BAD_REQUEST);
+        }
+
+
             $channel = new Channel();
-            $channel->setName($data['name']);
-            $userIds = $data['userIds'];
+            $channel->setName($name);
+            
 
             // Récupérez les utilisateurs à partir des identifiants
             $users = $userRepository->findBy(['id' => $userIds]);
@@ -43,7 +52,6 @@ class ChannelController extends AbstractController
             return $this->json([
                 'channel' => "channel créé"
             ]);
-        }
     }
 
 
