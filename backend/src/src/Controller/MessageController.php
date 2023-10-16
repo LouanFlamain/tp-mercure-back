@@ -44,6 +44,14 @@ class MessageController extends AbstractController
             return new JsonResponse(['error' => 'Canal non trouvé'], 404);
         }
 
+        // On verifie que le channel contient l'id de la personne
+        if (!$channel->getUser()->contains($user)) {
+            return new JsonResponse([
+                'success' => false,
+                'message' => "Vous n êtes pas membre de ce canal",
+            ], Response::HTTP_FORBIDDEN);
+    }
+
     
         $message->setChannel($channel); 
         $message->setUserId($user);
