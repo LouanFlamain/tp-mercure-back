@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ChannelRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -30,6 +31,7 @@ class Channel
 
     public function __construct()
     {
+        $this->createdAt = new DateTimeImmutable();
         $this->User = new ArrayCollection();
         $this->message = new ArrayCollection();
     }

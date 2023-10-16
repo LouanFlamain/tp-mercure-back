@@ -9,6 +9,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 
 #[UniqueEntity('username', 'email')]
@@ -39,7 +41,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'userId', targetEntity: Message::class, cascade: ["persist"])]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Message::class, cascade: ["persist"])]
     private Collection $messages;
 
     #[ORM\ManyToMany(targetEntity: Channel::class, mappedBy: 'User',  cascade: ["persist"])]
