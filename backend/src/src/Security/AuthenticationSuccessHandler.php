@@ -43,6 +43,7 @@ class AuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterf
         $username = $user->getUsername();
         $createAt = $user->getCreatedAt();
         $role = $user->getRoles();
+        $id = $user->getId();
 
         $response = new JsonResponse([
             'success' => true,
@@ -50,7 +51,8 @@ class AuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterf
             'email' => $email,
             'username' => $username,
             'creation_date' => $createAt,
-            'role' => $role
+            'role' => $role,
+            'id' => $id
         ]);
 
 

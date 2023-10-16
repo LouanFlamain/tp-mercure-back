@@ -24,10 +24,7 @@ const Test = () => {
   };
 
   return (
-    <button
-      onClick={() => console.log(localStorage.getItem("token"))}
-      className="btn"
-    >
+    <button onClick={() => console.log(user)} className="btn">
       test
     </button>
   );
