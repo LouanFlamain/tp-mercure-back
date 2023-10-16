@@ -39,6 +39,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\OneToMany(mappedBy: 'userId', targetEntity: Message::class, cascade: ["persist"])]
+    private Collection $messages;
+
+    #[ORM\ManyToMany(targetEntity: Channel::class, mappedBy: 'User',  cascade: ["persist"])]
+    private Collection $channels;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -133,8 +139,67 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+      /**
+     * @return Collection<int, Message>
+     */
+    public function getMessages(): Collection
+    {
+        return $this->messages;
+    }
+
+    public function addMessage(Message $message): static
+    {
+        if (!$this->messages->contains($message)) {
+            $this->messages->add($message);
+            $message->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMessage(Message $message): static
+    {
+        if ($this->messages->removeElement($message)) {
+            // set the owning side to null (unless already changed)
+            if ($message->getUserId() === $this) {
+                $message->setUserId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Channel>
+     */
+    public function getChannels(): Collection
+    {
+        return $this->channels;
+    }
+
+    public function addChannel(Channel $channel): static
+    {
+        if (!$this->channels->contains($channel)) {
+            $this->channels->add($channel);
+            $channel->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChannel(Channel $channel): static
+    {
+        if ($this->channels->removeElement($channel)) {
+            $channel->removeUser($this);
+        }
+
+        return $this;
+    }
+
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
+        $this->messages = new ArrayCollection();
+        $this->channels = new ArrayCollection();
     }
 }
