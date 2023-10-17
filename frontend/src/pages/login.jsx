@@ -42,6 +42,9 @@ const Login = () => {
             id: data.id,
             creation_date: data.creation_date,
           };
+          if (localStorage.getItem("token") !== null) {
+            localStorage.clear("token");
+          }
           localStorage.setItem("token", data.token);
           dispatch(addUser(user));
           navigate("/");
