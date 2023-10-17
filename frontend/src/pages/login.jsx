@@ -35,8 +35,15 @@ const Login = () => {
       .then((data) => {
         console.log("response", data);
         if (data.success) {
+          const user = {
+            email: data.email,
+            username: data.username,
+            role: data.role,
+            id: data.id,
+            creation_date: data.creation_date,
+          };
           localStorage.setItem("token", data.token);
-          dispatch(addUser(data));
+          dispatch(addUser(user));
           navigate("/");
         }
       })

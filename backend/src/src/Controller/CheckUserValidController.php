@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\User;
+use Symfony\Component\HttpFoundation\Request;
 
 class CheckUserValidController extends AbstractController
 {
@@ -26,30 +27,39 @@ class CheckUserValidController extends AbstractController
             'message' => 'utilisateur valide'
         ), Response::HTTP_OK);
     }
-    #[Route('/api/get_informations', 'user.getInformations', methods: "GET")]
-    public function getUserInformations(EntityManagerInterface $entityManager) : JsonResponse{
+    #[Route('/api/get_informations', 'user.getInformations', methods: "POST")]
+    public function getUserInformations(EntityManagerInterface $entityManager, Request $req) : JsonResponse{
 
-        $email = 'admin@admin.fr';
+        $data = json_decode($req->getContent(), true);
 
-        $repository = $entityManager->getRepository(User::class);
-        $qb = $repository->createQueryBuilder('p');
-        $qb->select('p')
-        ->where('p.email = :email')
-        ->setParameter('email', $email);
+        $email = $data['email'] ?? null;
 
-        $user = $qb->getQuery()->getOneOrNullResult();
-
-        $username = $user->getUsername();
-        $id = $user->getId();
-        $role = $user->getRoles();
-        $createdAt = $user->getCreatedAt();
-
-        return new JsonResponse(array(
-            'code' => 200,
-            'username' => $username,
-            'id' => $id,
-            'createdAt' => $createdAt,
-            'role' => $role
-        ));
+        if($email !== null){
+            $repository = $entityManager->getRepository(User::class);
+            $qb = $repository->createQueryBuilder('p');
+            $qb->select('p')
+            ->where('p.email = :email')
+            ->setParameter('email', $email);
+    
+            $user = $qb->getQuery()->getOneOrNullResult();
+    
+            $username = $user->getUsername();
+            $id = $user->getId();
+            $role = $user->getRoles();
+            $createdAt = $user->getCreatedAt();
+    
+            return new JsonResponse(array(
+                'code' => 200,
+                'username' => $username,
+                'id' => $id,
+                'createdAt' => $createdAt,
+                'role' => $role,
+                'email' => $email
+            ));
+        }
+        return new JsonResponse((array(
+            'code' => 403,
+            'message' => 'access forbidden'
+        )));
     }
 }

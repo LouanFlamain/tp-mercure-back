@@ -13,7 +13,7 @@ function App() {
         <Route path="/" element={<NeedAuth children={<Homepage />} />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/test" element={<Test />} />
+        <Route path="/test" element={<NeedAuth children={<Test />} />} />
         <Route path="*" element={<Error404 />} />
       </Routes>
     </div>
