@@ -10,7 +10,7 @@ const EndChat = () => {
         <p className="mr-1 text-center">Utilisateur</p>
       </div>
       <div className="chat-bubble">I hate you!</div>
-      <date className="chat-footer opacity-50">Maintenant</date>
+      <time className="chat-footer opacity-50">Maintenant</time>
     </div>
   );
 };

@@ -41,6 +41,7 @@ const Login = () => {
             role: data.role,
             id: data.id,
             creation_date: data.creation_date,
+            image: data.image,
           };
           if (localStorage.getItem("token") !== null) {
             localStorage.clear("token");

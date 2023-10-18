@@ -47,6 +47,7 @@ class CheckUserValidController extends AbstractController
             $id = $user->getId();
             $role = $user->getRoles();
             $createdAt = $user->getCreatedAt();
+            $image = $user->getImage();
     
             return new JsonResponse(array(
                 'code' => 200,
@@ -54,7 +55,8 @@ class CheckUserValidController extends AbstractController
                 'id' => $id,
                 'createdAt' => $createdAt,
                 'role' => $role,
-                'email' => $email
+                'email' => $email,
+                'image' => $image
             ));
         }
         return new JsonResponse((array(

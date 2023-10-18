@@ -8,7 +8,7 @@ const ListGroupTemplate = () => {
           <Profile />
           <p>Username</p>
         </div>
-        <date>Hier</date>
+        <time>Hier</time>
       </div>
     </li>
   );

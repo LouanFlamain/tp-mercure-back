@@ -51,6 +51,7 @@ const NeedAuth = ({ children }) => {
                     role: data.role,
                     id: data.id,
                     creation_date: data.createdAt.date,
+                    image: data.image,
                   };
                   dispatch(addUser(user));
                 } else {

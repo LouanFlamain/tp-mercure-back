@@ -1,12 +1,20 @@
 import Profile from "./Profile";
-import { BiLogOut } from "react-icons/bi";
+import { BiLogOut, BiSolidMessageAdd } from "react-icons/bi";
 import { useDispatch } from "react-redux";
 import { addUser } from "../redux/userSlice";
 import { useNavigate } from "react-router-dom";
 
-const UserBar = () => {
+const UserBar = ({ state, addUser }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const handleClick = () => {
+    if (!state) {
+      addUser(true);
+    } else {
+      addUser(false);
+    }
+  };
 
   const Disconnect = () => {
     localStorage.clear("token");
@@ -22,10 +30,21 @@ const UserBar = () => {
         <Profile />
         <p className="text-clear">username</p>
       </div>
-      <div>
+      <div className="flex">
+        <div
+          className="cursor-pointer mr-6"
+          style={{
+            transform: "scale(2)",
+          }}
+        >
+          <BiSolidMessageAdd
+            onClick={handleClick}
+            style={{ color: "#F0F8FF" }}
+          />
+        </div>
         <div
           onClick={Disconnect}
-          className="cursor-pointer ho"
+          className="cursor-pointer"
           style={{
             transform: "scale(2)",
           }}

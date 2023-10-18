@@ -40,7 +40,8 @@ class RegisterController extends AbstractController
         ->setEmail($email)
         ->setUsername($username)
         ->setPassword($password)
-        ->setRoles(array('ROLE_USER'));
+        ->setRoles(array('ROLE_USER'))
+        ->setImage('base');
         
 
         $manager->persist($user);
