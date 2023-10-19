@@ -1,12 +1,11 @@
 import ListGroupTemplate from "./ListGroupTemplate";
 
-const ListGroups = () => {
+const ListGroups = ({ listChat }) => {
   return (
     <ul>
-      <ListGroupTemplate />
-      <ListGroupTemplate />
-      <ListGroupTemplate />
-      <ListGroupTemplate />
+      {listChat.map((data, index) => {
+        return <ListGroupTemplate key={index} data={data} />;
+      })}
     </ul>
   );
 };

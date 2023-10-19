@@ -1,14 +1,14 @@
 import Profile from "./Profile";
 
-const ListGroupTemplate = () => {
+const ListGroupTemplate = ({ data }) => {
+  const [dateFormated, other] = data.last_update.date.split(" ");
   return (
     <li className="cursor-pointer hover:bg-clear hover:text-dark">
       <div className="w-full border-1 border-grey h-16 flex items-center justify-between px-4">
         <div className="flex items-center">
-          <Profile />
-          <p>Username</p>
+          <p>{data.data[1].username}</p>
         </div>
-        <time>Hier</time>
+        <time>{dateFormated}</time>
       </div>
     </li>
   );

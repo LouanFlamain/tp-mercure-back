@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { selectUser, addUser } from "../redux/userSlice";
@@ -11,6 +11,8 @@ const NeedAuth = ({ children }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [isUserLoaded, setIsUserLoader] = useState(false);
 
   const token = localStorage.getItem("token");
 
@@ -54,6 +56,7 @@ const NeedAuth = ({ children }) => {
                     image: data.image,
                   };
                   dispatch(addUser(user));
+                  setIsUserLoader(true);
                 } else {
                   navigate("/login", { state: location });
                 }
@@ -70,6 +73,9 @@ const NeedAuth = ({ children }) => {
     ref.current = true;
   }, []);
 
+  if (!isUserLoaded) {
+    return null;
+  }
   return children;
 };
 

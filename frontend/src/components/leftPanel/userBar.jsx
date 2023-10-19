@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { addUser } from "../redux/userSlice";
 import { useNavigate } from "react-router-dom";
 
-const UserBar = ({ state, addUser }) => {
+const UserBar = ({ state, addUser, userData }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -27,8 +27,13 @@ const UserBar = ({ state, addUser }) => {
       className="bg-dark flex p-4 justify-between items-center h-16 rounded-tl-2xl"
     >
       <div className="flex items-center">
-        <Profile />
-        <p className="text-clear">username</p>
+        <Profile userImage={userData.image} />
+        <p
+          className="text-clear"
+          onClick={() => console.log(userData.username)}
+        >
+          {userData.username}
+        </p>
       </div>
       <div className="flex">
         <div

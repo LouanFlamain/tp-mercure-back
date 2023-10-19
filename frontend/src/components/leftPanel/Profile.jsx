@@ -1,7 +1,7 @@
-const Profile = () => {
+const Profile = ({ userImage }) => {
   return (
     <div className="w-10 rounded-full mr-4">
-      <img src="pp/bill.jpeg" />
+      <img className="rounded-full" src={`pp/${userImage}.jpeg`} />
     </div>
   );
 };

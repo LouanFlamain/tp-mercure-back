@@ -73,6 +73,7 @@ class GroupChatController extends AbstractController
         foreach($rooms as $room){
             $intervenant = $room->getIntervenant();
             $id = $room->getId();
+            $lastUpdate = $room->getLastUpdate();
 
             $array_user = [];
 
@@ -92,7 +93,8 @@ class GroupChatController extends AbstractController
             }
             array_push($array, array(
                 'room_id' => $id,
-                'data' => $array_user
+                'last_update' => $lastUpdate,
+                'data' => $array_user,
             ));
         }
 
