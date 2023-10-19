@@ -71,9 +71,22 @@ class GroupChatController extends AbstractController
         foreach($rooms as $room){
             $intervenant = $room->getIntervenant();
             $id = $room->getId();
+
+            $repository_user = $entityManager->getRepository(User::class);
+            $qb_user = $repository_user->createQueryBuilder('u');
+            $qb_user->select('u')
+            ->where('u.id = :id')
+            ->setParameter('id', $id);
+            $users = $qb_user->getQuery()->getResult();
+            $array_user = [];
+            foreach($users as $user){
+                $username = $user->getUsername();
+                array_push($array_user, $username);
+            }
             array_push($array, [
                 'intervenant' => json_decode($intervenant),
-                'id' => $id
+                'id' => $id,
+                'username' => $array_user
             ]);
         }
 
