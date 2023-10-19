@@ -152,6 +152,13 @@ class GroupChatController extends AbstractController
                     'message' => 'The user who add new user is not in the channel'
                 ), Response::HTTP_NOT_FOUND);
             }
+
+            if (!in_array($newUserId, $array)) {
+                return new JsonResponse(array(
+                    'success' => false,
+                    'message' => 'User already in the chat'
+                ), Response::HTTP_NOT_FOUND);
+            }
             $array[] = $id;
             $array_json = json_encode($array);
 
