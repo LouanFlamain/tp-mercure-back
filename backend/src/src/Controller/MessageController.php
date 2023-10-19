@@ -55,18 +55,24 @@ class MessageController extends AbstractController
     public function getMessage(Request $req, EntityManagerInterface $entityManager):JsonResponse{
         $data = json_decode($req->getContent(), true);
         $chat_id = $data['chat_id'] ?? null;
+        $offset = $data['offset'] ?? null;
 
-        if($chat_id === null){
+        if($chat_id === null || $offset === null){
             return new JsonResponse(array(
                 'success' => false
             ), Response::HTTP_BAD_REQUEST);
         }
 
+        $limit = 30;
+        
         $repository = $entityManager->getRepository(Message::class);
         $qb = $repository->createQueryBuilder('p');
         $qb->select('p')
         ->where('p.chat_id = :chat_id')
-        ->setParameter('chat_id', $chat_id);
+        ->orderBy('p.id', 'DESC') 
+        ->setParameter('chat_id', $chat_id)
+        ->setFirstResult($offset) 
+        ->setMaxResults($limit);  
 
         $messages = $qb->getQuery()->getResult();
 
