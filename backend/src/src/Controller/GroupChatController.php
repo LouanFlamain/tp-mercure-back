@@ -102,4 +102,56 @@ class GroupChatController extends AbstractController
             "data" => $array
         ), Response::HTTP_OK);
     }
+
+    #[Route('/api/update_chat', 'chat.update', methods:"PUT")]
+    public function chat_update(EntityManagerInterface $entityManager,Request $req) : JsonResponse{
+        $data = json_decode($req->getContent(), true);
+        $newUserId = $data['newUser'] ?? null;
+        $idChannel = $data['idChannel'] ?? null;
+        $participant = $data['participant'] ?? null;
+
+        if($newUserId === null || $idChannel === null || $participant === null){
+            return new JsonResponse(array(
+                'success' => false,
+                'code' => 400
+            ), Response::HTTP_BAD_REQUEST);
+        }
+
+        $newUser = $entityManager->getRepository(User::class)->find($newUserId);
+
+        $group = $entityManager->getRepository(GroupChat::class)->find($idChannel);
+
+        if ($newUser && $group) {
+
+            $id = $newUser -> getId();
+            $initialParticipant = $group -> getIntervenant();
+            $array = json_decode($initialParticipant, true);
+
+            if (!in_array($participant, $array)) {
+                return new JsonResponse(array(
+                    'success' => false,
+                    'message' => 'The user who add new user is not in the channel'
+                ), Response::HTTP_NOT_FOUND);
+            }
+            $array[] = $id;
+            $array_json = json_encode($array);
+
+            $group-> setIntervenant($array_json);
+
+
+            $entityManager->persist($group);
+            $entityManager->flush();
+    
+            return new JsonResponse(array(
+                'success' => true,
+                'message' => "Group updated"
+            ), Response::HTTP_OK);
+        } else {
+            return new JsonResponse(array(
+                'success' => false,
+                'message' => 'User or group not found'
+            ), Response::HTTP_NOT_FOUND);
+        }
+
+    }
 }
