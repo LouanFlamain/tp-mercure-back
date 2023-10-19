@@ -12,6 +12,8 @@ use App\Entity\GroupChat;
 use App\Entity\User;
 use DateTimeImmutable;
 
+use function PHPSTORM_META\type;
+
 class GroupChatController extends AbstractController
 {
     #[Route('/api/group_chat', name: 'app_group_chat')]
@@ -72,7 +74,28 @@ class GroupChatController extends AbstractController
             $intervenant = $room->getIntervenant();
             $id = $room->getId();
 
+            $array_user = [];
+
+            $intervenant = json_decode($intervenant);
             $repository_user = $entityManager->getRepository(User::class);
+            foreach($intervenant as $user_id){
+                $qb_user = $repository_user->createQueryBuilder('u');
+                $qb_user->select('u')
+                ->where('u.id = :id')
+                ->setParameter('id', $user_id);
+                $users = $qb_user->getQuery()->getResult();;
+                $username = $users[0]->getUsername();
+                array_push($array_user, array(
+                    'username' => $username,
+                    'user_id' => $user_id
+                ));
+            }
+            array_push($array, array(
+                'room_id' => $id,
+                'data' => $array_user
+            ));
+
+            /*$repository_user = $entityManager->getRepository(User::class);
             $qb_user = $repository_user->createQueryBuilder('u');
             $qb_user->select('u')
             ->where('u.id = :id')
@@ -84,10 +107,12 @@ class GroupChatController extends AbstractController
                 array_push($array_user, $username);
             }
             array_push($array, [
-                'intervenant' => json_decode($intervenant),
-                'id' => $id,
+                'intervenant' => array(
+                    json_decode($intervenant)
+                ),
+                'chat_id' => $id,
                 'username' => $array_user
-            ]);
+            ]);*/
         }
 
         return new JsonResponse(array(
