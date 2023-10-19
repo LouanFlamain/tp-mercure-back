@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Message;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -91,10 +92,28 @@ class GroupChatController extends AbstractController
                     'user_id' => $user_id
                 ));
             }
+
+            $repository = $entityManager->getRepository(Message::class);
+            $qb_message = $repository->createQueryBuilder('p');
+            $qb_message->select('p')
+                ->where('p.chat_id = :chat_id')
+                ->orderBy('p.createdAt', 'DESC') 
+                ->setParameter('chat_id', $id)
+                ->setMaxResults(1);
+            
+            $results = $qb_message->getQuery()->getResult();
+            
+            if (!empty($results)) {
+                $message = $results[0]->getMessage();
+            } else {
+                $message = 'Add a new message';
+            }
+            
             array_push($array, array(
                 'room_id' => $id,
                 'last_update' => $lastUpdate,
                 'data' => $array_user,
+                'last_message' => $message
             ));
         }
 
