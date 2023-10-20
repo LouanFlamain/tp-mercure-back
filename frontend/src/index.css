@@ -17,3 +17,6 @@
     hsl(var(--b2)) 14px
   );
 }
+.h-message {
+  height: 38rem;
+}

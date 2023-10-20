@@ -1,7 +1,7 @@
 import Profile from "./Profile";
 import { BiLogOut, BiSolidMessageAdd } from "react-icons/bi";
 import { useDispatch } from "react-redux";
-import { addUser } from "../redux/userSlice";
+import { deleteUser } from "../redux/userSlice";
 import { useNavigate } from "react-router-dom";
 
 const UserBar = ({ state, addUser, userData }) => {
@@ -17,8 +17,8 @@ const UserBar = ({ state, addUser, userData }) => {
   };
 
   const Disconnect = () => {
-    localStorage.clear("token");
-    dispatch(addUser(null));
+    localStorage.clear();
+    dispatch(deleteUser);
     navigate("/login");
   };
   return (

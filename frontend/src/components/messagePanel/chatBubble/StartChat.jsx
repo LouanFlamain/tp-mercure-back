@@ -1,4 +1,4 @@
-const StartChat = () => {
+const StartChat = ({ data }) => {
   return (
     <div className="chat chat-start">
       <div className="chat-image avatar">
@@ -7,9 +7,9 @@ const StartChat = () => {
         </div>
       </div>
       <div className="chat-header">
-        <p>Correspondant</p>
+        <p>{data.username}</p>
       </div>
-      <div className="chat-bubble">You were the Chosen One!</div>
+      <div className="chat-bubble">{data.message}</div>
       <time className="chat-footer opacity-50">12h35</time>
     </div>
   );

@@ -1,8 +1,5 @@
-import { BiLogOut } from "react-icons/bi";
-import { useDispatch, useSelector } from "react-redux";
-import { addUser, selectUser } from "../redux/userSlice";
-import { useAsyncError, useNavigate } from "react-router-dom";
-import Profile from "./Profile";
+import { useSelector } from "react-redux";
+import { selectUser } from "../redux/userSlice";
 import UserBar from "./userBar";
 import SearchBar from "./SearchBar";
 import { useEffect, useRef, useState } from "react";

@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\GroupChat;
 use App\Entity\User;
+use App\Entity\Message;
 use DateTimeImmutable;
 
 use function PHPSTORM_META\type;
@@ -39,7 +40,8 @@ class GroupChatController extends AbstractController
 
         $group = new GroupChat;
         $group -> setIntervenant($intervenant_id_json)
-        ->setLastUpdate(new DateTimeImmutable());
+        ->setLastUpdate(new DateTimeImmutable())
+        ->setLastMessage(0);
 
         $entityManager->persist($group);
         $entityManager->flush();
@@ -71,6 +73,31 @@ class GroupChatController extends AbstractController
         $array = [];
 
         foreach($rooms as $room){
+            $room_id = $room->getId();
+
+            //lastmessage et lastupdate (chat_room)
+
+            $repository_message = $entityManager->getRepository(Message::class);
+            $qb_message = $repository_message->createQueryBuilder('m');
+            
+            $qb_message->select('m')
+                       ->where('m.chat_id = :chat_id')
+                       ->setParameter('chat_id', $room_id)
+                       ->orderBy('m.id', 'DESC')
+                       ->setMaxResults(1);
+            
+            $message_data = $qb_message->getQuery()->getOneOrNullResult();
+            
+            // Si $message_data n'est pas null, alors vous pouvez accéder à ses propriétés
+            if ($message_data) {
+                $message = $message_data->getMessage();
+                // Vous pouvez maintenant utiliser la variable $message pour la suite de votre logique.
+            } else{
+                $message = null;
+            }
+            
+
+
             $intervenant = $room->getIntervenant();
             $id = $room->getId();
             $lastUpdate = $room->getLastUpdate();
@@ -93,6 +120,7 @@ class GroupChatController extends AbstractController
             }
             array_push($array, array(
                 'room_id' => $id,
+                'last_message' => $message,
                 'last_update' => $lastUpdate,
                 'data' => $array_user,
             ));

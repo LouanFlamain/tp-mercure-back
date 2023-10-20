@@ -61,6 +61,8 @@ const NeedAuth = ({ children }) => {
                   navigate("/login", { state: location });
                 }
               });
+          } else {
+            setIsUserLoader(true);
           }
         } else {
           localStorage.clear("token");

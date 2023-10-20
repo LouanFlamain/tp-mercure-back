@@ -14,11 +14,14 @@ class GroupChat
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private ?\DateTimeImmutable $last_update = null;
 
     #[ORM\Column(length: 255)]
     private ?string $intervenant = null;
+
+    #[ORM\Column]
+    private ?int $last_message = null;
 
 
     public function getId(): ?int
@@ -47,6 +50,18 @@ class GroupChat
     public function setIntervenant(string $intervenant): static
     {
         $this->intervenant = $intervenant;
+
+        return $this;
+    }
+
+    public function getLastMessage(): ?int
+    {
+        return $this->last_message;
+    }
+
+    public function setLastMessage(int $last_message): static
+    {
+        $this->last_message = $last_message;
 
         return $this;
     }

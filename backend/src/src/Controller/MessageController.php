@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Message;
 use App\Entity\User;
+use App\Entity\GroupChat;
 
 class MessageController extends AbstractController
 {
@@ -46,9 +47,21 @@ class MessageController extends AbstractController
         $entityManager->persist($message);
         $entityManager->flush();
 
+        $message_id = $message->getId();
+
+        $repository = $entityManager->getRepository(GroupChat::class);
+        $qb = $repository->find($chat_id);
+
+        if($qb){
+            $qb->setLastMessage($message_id)
+            ->setLastUpdate($createdAt);
+            $entityManager->flush();
+        }
+
+
         return new JsonResponse(array(
             'success' => true,
-            "message" => 'message created'
+            "message" => 'message created',
         ), Response::HTTP_OK);
     }   
     #[Route('/api/get_message', 'message.get', methods: "POST")]
@@ -81,7 +94,7 @@ class MessageController extends AbstractController
         $array = [];
 
         foreach($messages as $message){
-            $user_id = $message->getId();
+            $user_id = $message->getUserId();
             $messageText = $message->getMessage();
             $createdAt = $message->getCreatedAt();
 
