@@ -105,15 +105,20 @@ class GroupChatController extends AbstractController
             
             if (!empty($results)) {
                 $message = $results[0]->getMessage();
+                $messageDate = $results[0]->getCreatedAt()->format('Y-m-d H:i'); 
             } else {
                 $message = 'Add a new message';
+                $messageDate =null;
             }
             
             array_push($array, array(
                 'room_id' => $id,
                 'last_update' => $lastUpdate,
                 'data' => $array_user,
-                'last_message' => $message
+                'last_message' => array(
+                    'message' => $message,
+                    'message_date' => $messageDate
+                )
             ));
         }
 
