@@ -10,7 +10,7 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<NeedAuth children={<Homepage />} />} />
+        <Route path="/"  element=<Homepage /> />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/test" element={<NeedAuth children={<Test />} />} />

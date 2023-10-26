@@ -11,6 +11,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Message;
 use App\Entity\User;
+use Symfony\Component\Mercure\Update;
+use Symfony\Component\Mercure\HubInterface;
+
 
 class MessageController extends AbstractController
 {
@@ -22,7 +25,7 @@ class MessageController extends AbstractController
         ]);
     }
     #[Route('/api/create_message', 'message.create', methods: "POST")]
-    public function createMessage(Request $req, EntityManagerInterface $entityManager):JsonResponse{
+    public function createMessage(Request $req, EntityManagerInterface $entityManager, HubInterface $hub):JsonResponse{
         $data = json_decode($req->getContent(), true);
         $messageText = $data['message'] ?? null;
         $user_id = $data['user_id'] ?? null;
@@ -45,6 +48,21 @@ class MessageController extends AbstractController
         
         $entityManager->persist($message);
         $entityManager->flush();
+        
+
+        try {
+            $update = new Update(
+                'http://mercure:9090/message/1',
+                json_encode(['New Message' => 'newMessage'])
+            );
+            $hub->publish($update);
+            // The update was successfully sent.
+        } catch (\Throwable $e) {
+            return new JsonResponse(array(
+                'success' => "false",
+                "message" => 'update pas envoyée'
+            ), Response::HTTP_OK);
+        }
 
         return new JsonResponse(array(
             'success' => true,

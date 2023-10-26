@@ -8,6 +8,7 @@ import SearchBar from "./SearchBar";
 import { useEffect, useRef, useState } from "react";
 import ListGroups from "./ListGroups";
 import SearchUserCard from "./SearchUserCard";
+import MercureSubscription from "../mercureSubsciption";
 
 const LeftPanel = () => {
   // value pour trier les groupes
@@ -31,6 +32,10 @@ const LeftPanel = () => {
   const id = {
     id: userData.id,
   };
+
+const handleNewMessage = () =>{
+  console.log("nouveau message")
+}
 
   useEffect(() => {
     if (!ref.current) {
@@ -97,6 +102,7 @@ const LeftPanel = () => {
       ) : (
         <div></div>
       )}
+      <MercureSubscription topic="http://localhost:9090/chat/1" onMessage={handleNewMessage} />
     </div>
   );
 };

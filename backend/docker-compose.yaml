@@ -12,6 +12,8 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/http.d/default.conf
       - ./src:/var/www/html
+      - vendor:/var/www/html/vendor
+      - var:/var/www/html/var
 
   db:
     image: mariadb:latest
@@ -28,18 +30,22 @@ services:
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   mercure:
-    image: dunglas/mercure
-    restart: unless-stopped
-    container_name: mercure_docker
-    environment:
-      # Uncomment the following line to disable HTTPS
-      SERVER_NAME: ":80"
-      MERCURE_PUBLISHER_JWT_KEY: "!ChangeMe!"
-      MERCURE_SUBSCRIBER_JWT_KEY: "!ChangeMe!"
-      MERCURE_EXTRA_DIRECTIVES: cors_origins "http://localhost:3000"
-    ports:
-      - "9090:80"
-      - "443:443"
+      image: dunglas/mercure
+      restart: unless-stopped
+      container_name: mercure_docker
+      environment:
+        # Uncomment the following line to disable HTTPS
+        SERVER_NAME: ":80"
+        MERCURE_PUBLISHER_JWT_KEY: "!ChangeMe!llllllllllllllllllllllllllllllllllllllllllllllllllllllllll"
+        MERCURE_SUBSCRIBER_JWT_KEY: "!ChangeMe!llllllllllllllllllllllllllllllllllllllllllllllllllllllllll"
+        MERCURE_EXTRA_DIRECTIVES: |
+          cors_allow_credentials true;
+          cors_allow_origin *;
+          cors_allow_methods GET, POST, OPTIONS; 
+      ports:
+        - "9090:80"
+        - "443:443"
+
 
   adminer:
     image: adminer
@@ -49,3 +55,5 @@ services:
 
 volumes:
   db-data:
+  vendor:
+  var:
