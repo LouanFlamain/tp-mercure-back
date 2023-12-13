@@ -11,6 +11,7 @@ import { EnvelopeIcon as Message } from "react-native-heroicons/mini";
 import { PlusCircleIcon as Create } from "react-native-heroicons/mini";
 import { Cog6ToothIcon as SettingsIcon } from "react-native-heroicons/mini";
 import { createStackNavigator } from '@react-navigation/stack';
+import Conversation from './src/screens/Conversation';
 
 
 
@@ -71,6 +72,7 @@ export default function App() {
       <Stack.Screen name="Home" component={HomeTabs} />
       <Stack.Screen name="Login" component={Login}/>
       <Stack.Screen name="Register" component={Register} />
+      <Stack.Screen name="Conversation" component={Conversation}/>
     </Stack.Navigator>
       
     </NavigationContainer>
