@@ -1,16 +1,15 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
-import { Avatar } from 'react-native-paper';
+import {TouchableOpacity, Text, StyleSheet, Image} from 'react-native';
+import {Avatar} from 'react-native-paper';
 
 
 interface AvatarProps {
     size: "small" | "medium" |"large",
     image?: string, 
-    OnPress?: any
 
 }
 
-const AvatarItem: React.FC<AvatarProps> = ({ size, image, OnPress}) => {
+const AvatarItem: React.FC<AvatarProps> = ({size, image}) => {
     let avatarStyle;
     let avatarSize;
     const uri =  image ? image : require("../../public/img/default_person.png");
@@ -37,12 +36,7 @@ const AvatarItem: React.FC<AvatarProps> = ({ size, image, OnPress}) => {
 
 
   return (
-    OnPress ? 
-    <Avatar.Image source={uri} size={avatarSize}/>
-
-    : 
     <Avatar.Image source={uri}  size={avatarSize} />
-    
 
     
   );

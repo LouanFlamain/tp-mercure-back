@@ -12,13 +12,19 @@ import {
   View,
 } from 'react-native';
 
+interface ConversationProp{
+  route: any
+}
 
-function Conversations(): JSX.Element {
+
+function Conversations<ConversationProp>({ route }): JSX.Element {
+  const {id}= route.params;
+
 
   return (
     <SafeAreaView >
         <View>
-            <Text>Conversations</Text>
+            <Text>Conversations {id}</Text>
         </View>
       
     </SafeAreaView>

@@ -11,6 +11,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import SearchBar from '../components/SearchBar';
 
 
 function NewDiscussion(): JSX.Element {
@@ -18,7 +19,7 @@ function NewDiscussion(): JSX.Element {
   return (
     <SafeAreaView >
         <View>
-            <Text>Nouvelle discussion</Text>
+            
         </View>
       
     </SafeAreaView>

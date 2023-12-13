@@ -3,6 +3,8 @@ import { useNavigation } from '@react-navigation/native';
 import { Button, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import SearchBar from '../components/SearchBar';
 import AvatarItem from '../components/Avatar';
+import ListMessage from '../components/ListMessage';
+import TabButtons from '../components/TabButtons';
 
 function Messages(): JSX.Element {
   const navigation = useNavigation();
@@ -15,9 +17,33 @@ function Messages(): JSX.Element {
     // Implémente la logique de recherche ici
     console.log(`Recherche en cours pour : ${searchValue}`);
   };
-  const OnPress = () =>{
-    console.log("changer la photo")
-  }
+
+  const tabsButtons = [
+    {
+      value : "groupe",
+      label : "groupe"
+    },
+    {
+      value : "amis",
+      label : "amis"
+    }
+  ]
+
+  const conversations = [
+    {
+      id: 1,
+      pseudo : "Marie",
+      message: "Salut comment tu vas ????????????????????????????????????????????????? ?",
+      date : "07/09/2022"
+    },
+    {
+      id: 2,
+      pseudo : "Lucas",
+      message: "OOOOOOOOOOOOOOOOOOOOOOOOOOh",
+      date : "07/09/2022"
+    },
+  ]
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -25,10 +51,22 @@ function Messages(): JSX.Element {
         <Text>Messages</Text>
       </View>
       <View style={styles.messagesContainer}>
+      <TabButtons buttons={tabsButtons}/>
       <SearchBar onSearch={handleSearch} variant="light" placeholder={"Cherchez une discussion"}/>
         <Button title="Login" onPress={handleLogin} />
-        <AvatarItem size={"large"} OnPress={OnPress}  />
+        <AvatarItem size={"large"} />
+        {conversations?.map((conversation)=>(
+          <ListMessage 
+          key={conversation.id}
+          id={conversation.id} 
+          pseudo={conversation.pseudo}
+          message={conversation.date} 
+          date={conversation.date} />
+        ))}
+        
+       
       </View>
+      
     </SafeAreaView>
   );
 }

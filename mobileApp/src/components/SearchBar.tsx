@@ -57,5 +57,4 @@ const styles = StyleSheet.create({
   },
 });
 
-// Exporte le composant SearchBar
 export default SearchBar;
